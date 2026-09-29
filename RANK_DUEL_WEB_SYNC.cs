@@ -12,10 +12,10 @@ public class CPHInline
         @"C:\Streamer.bot-x64-1.0.4\data\buddy_arena_leaderboard.json";
 
     private const string RankApiUrl =
-        "https://SEU-PROJETO.vercel.app/api/rank";
+        "https://duelrank.vercel.app/api/rank";
 
     private const string RankApiSecret =
-        "COLOQUE_AQUI_O_MESMO_RANK_UPDATE_SECRET_DO_VERCEL";
+        "szdjksdfnldf$#$#$^&$ESDzdfz@!!!@##%Ffoinfj(*";
 
     public bool Execute()
     {
