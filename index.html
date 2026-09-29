@@ -1,0 +1,1369 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#080a0f" />
+  <meta name="description" content="RushBud Rank Duel — rules, commands, scoring, season bonuses and final prize." />
+  <title>Rank Duel | RushBud</title>
+  <style>
+    :root{
+      --bg:#07090d;
+      --panel:#0e1218;
+      --panel2:#131923;
+      --line:rgba(255,255,255,.10);
+      --text:#f5f7fb;
+      --muted:#a9b1bf;
+      --gold:#ffd84a;
+      --orange:#ff8a2a;
+      --cyan:#57e6ff;
+      --green:#86f7a8;
+      --red:#ff6372;
+      --shadow:0 18px 60px rgba(0,0,0,.42);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 14% 0%, rgba(87,230,255,.10), transparent 34%),
+        radial-gradient(circle at 88% 10%, rgba(255,138,42,.11), transparent 30%),
+        linear-gradient(180deg,#06080c 0%,#0a0d13 48%,#06080c 100%);
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:.17;
+      background-image:
+        linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+      background-size:42px 42px;
+      mask-image:linear-gradient(to bottom,black,transparent 84%);
+    }
+
+    a{color:inherit}
+    button{font:inherit}
+
+    .shell{
+      width:min(1120px,calc(100% - 32px));
+      margin:0 auto;
+      position:relative;
+      z-index:1;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:30;
+      backdrop-filter:blur(18px);
+      background:rgba(7,9,13,.78);
+      border-bottom:1px solid var(--line);
+    }
+
+    .topbar-inner{
+      min-height:72px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:950;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .brand-mark{
+      width:40px;
+      height:40px;
+      border-radius:12px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg,var(--gold),var(--orange));
+      color:#101216;
+      box-shadow:0 0 30px rgba(255,216,74,.22);
+    }
+
+    .language{
+      display:flex;
+      gap:4px;
+      padding:5px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.035);
+    }
+
+    .language button{
+      border:0;
+      border-radius:999px;
+      padding:9px 12px;
+      cursor:pointer;
+      color:var(--muted);
+      background:transparent;
+      font-weight:900;
+      transition:.2s ease;
+    }
+
+    .language button.active{
+      background:var(--gold);
+      color:#101216;
+    }
+
+    .hero{
+      padding:88px 0 54px;
+      text-align:center;
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(87,230,255,.28);
+      color:var(--cyan);
+      background:rgba(87,230,255,.07);
+      font-size:.82rem;
+      font-weight:950;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+
+    h1{
+      margin:24px 0 20px;
+      font-size:clamp(3.3rem,10vw,7.2rem);
+      line-height:.88;
+      letter-spacing:-.065em;
+      text-transform:uppercase;
+      font-weight:1000;
+    }
+
+    .gold{
+      background:linear-gradient(90deg,var(--gold),#fff3ad,var(--orange));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+
+    .lead{
+      max-width:790px;
+      margin:0 auto;
+      color:var(--muted);
+      font-size:clamp(1rem,2vw,1.22rem);
+      line-height:1.7;
+    }
+
+    .hero-actions{
+      margin-top:30px;
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:13px 18px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      text-decoration:none;
+      font-weight:950;
+    }
+
+    .btn.primary{
+      background:linear-gradient(135deg,var(--gold),var(--orange));
+      border-color:transparent;
+      color:#101216;
+    }
+
+    section{
+      padding:34px 0;
+      scroll-margin-top:90px;
+    }
+
+    .section-title{
+      margin:0 0 10px;
+      font-size:clamp(1.8rem,4vw,2.6rem);
+      letter-spacing:-.035em;
+    }
+
+    .section-copy{
+      max-width:850px;
+      margin:0 0 22px;
+      color:var(--muted);
+      line-height:1.7;
+    }
+
+    .card{
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.025));
+      box-shadow:var(--shadow);
+    }
+
+    .video-card{padding:14px}
+    .video-frame{
+      position:relative;
+      aspect-ratio:16/9;
+      overflow:hidden;
+      display:grid;
+      place-items:center;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.08);
+      background:#05070a;
+    }
+
+    .video-frame video{
+      width:100%;
+      height:100%;
+      display:block;
+      object-fit:contain;
+      background:#000;
+    }
+
+    .video-placeholder{
+      position:absolute;
+      inset:0;
+      display:grid;
+      place-items:center;
+      padding:28px;
+      text-align:center;
+      background:
+        radial-gradient(circle at 50% 36%,rgba(87,230,255,.13),transparent 30%),
+        linear-gradient(135deg,rgba(255,216,74,.05),rgba(87,230,255,.05)),
+        #080b10;
+    }
+
+    .video-placeholder.hidden{display:none}
+
+    .play-icon{
+      width:78px;
+      height:78px;
+      margin:0 auto 18px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg,var(--gold),var(--orange));
+      color:#101216;
+      font-size:2rem;
+      box-shadow:0 0 44px rgba(255,216,74,.22);
+    }
+
+    .video-placeholder strong{font-size:1.2rem}
+    .video-placeholder span{
+      display:block;
+      margin-top:8px;
+      color:var(--muted);
+      line-height:1.6;
+    }
+
+    .steps,.rules{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+    }
+
+    .step,.rule-card,.score-card,.choice{padding:22px}
+    .step{min-height:190px}
+
+    .step-head{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    .step-num{
+      width:36px;
+      height:36px;
+      display:grid;
+      place-items:center;
+      border-radius:11px;
+      color:var(--cyan);
+      background:rgba(87,230,255,.10);
+      border:1px solid rgba(87,230,255,.24);
+      font-weight:1000;
+    }
+
+    .step h3,.choice h3,.score-card h3,.rule-card h3{margin:0;font-size:1.08rem}
+    .step p,.choice p,.score-card p,.rule-card p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.65;
+    }
+
+    .command-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:14px;
+    }
+
+    code.command{
+      padding:9px 11px;
+      border-radius:10px;
+      background:#05070a;
+      border:1px solid rgba(255,255,255,.12);
+      color:var(--green);
+      font-size:.94rem;
+      font-weight:850;
+      user-select:all;
+    }
+
+    .choice-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin-top:18px;
+    }
+
+    .choice.safe{border-color:rgba(87,230,255,.24)}
+    .choice.overdrive{border-color:rgba(255,138,42,.30)}
+
+    .choice-label{
+      display:inline-flex;
+      padding:6px 9px;
+      margin-bottom:14px;
+      border-radius:8px;
+      background:rgba(255,255,255,.06);
+      font-weight:1000;
+      letter-spacing:.05em;
+      text-transform:uppercase;
+    }
+
+    .choice.safe .choice-label{color:var(--cyan)}
+    .choice.overdrive .choice-label{color:var(--orange)}
+
+    .choice-list{
+      margin:14px 0 0;
+      padding-left:19px;
+      color:var(--muted);
+      line-height:1.65;
+    }
+
+    .stat-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:14px;
+    }
+
+    .score-big{
+      margin:7px 0 8px;
+      color:var(--gold);
+      font-size:2rem;
+      font-weight:1000;
+    }
+
+    .season-table{overflow:hidden}
+    .season-row{
+      display:grid;
+      grid-template-columns:1.05fr .8fr 2fr;
+      gap:16px;
+      align-items:center;
+      padding:16px 20px;
+      border-top:1px solid var(--line);
+    }
+    .season-row:first-child{border-top:0}
+    .season-row.header{
+      background:rgba(255,255,255,.035);
+      color:var(--muted);
+      font-size:.78rem;
+      font-weight:950;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .bonus{color:var(--gold);font-weight:1000}
+
+    .prize{
+      display:grid;
+      grid-template-columns:.9fr 1.1fr;
+      gap:16px;
+    }
+
+    .prize-visual{
+      min-height:310px;
+      display:grid;
+      place-items:center;
+      padding:28px;
+      text-align:center;
+      background:
+        radial-gradient(circle at 50% 42%,rgba(255,138,42,.18),transparent 30%),
+        linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));
+    }
+
+
+    .prize-product-image{
+      width:min(94%,620px);
+      max-height:520px;
+      object-fit:contain;
+      display:block;
+      margin:0 auto 18px;
+      filter:drop-shadow(0 22px 34px rgba(0,0,0,.42));
+    }
+
+    @media(max-width:760px){
+      .prize-product-image{
+        width:min(96%,440px);
+        max-height:390px;
+      }
+    }
+
+    .scorpion{
+      font-size:6rem;
+      filter:drop-shadow(0 0 28px rgba(255,138,42,.25));
+    }
+
+    .prize-copy{padding:28px}
+    .tag-list{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:16px;
+    }
+    .tag{
+      padding:8px 10px;
+      border-radius:10px;
+      background:rgba(255,255,255,.05);
+      border:1px solid var(--line);
+      font-size:.9rem;
+      font-weight:850;
+    }
+
+    .rule-icon{font-size:1.5rem;margin-bottom:12px}
+
+    .notice{
+      margin-top:14px;
+      padding:18px 20px;
+      border-radius:16px;
+      border:1px solid rgba(255,216,74,.22);
+      background:rgba(255,216,74,.06);
+      color:#f7e9a3;
+      line-height:1.65;
+    }
+
+
+    .live-rank-wrap{margin-top:8px}
+    .live-rank-card{overflow:hidden}
+    .live-rank-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 20px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.025)}
+    .live-rank-status{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:.88rem}
+    .live-dot{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 14px rgba(134,247,168,.65)}
+    .rank-refresh{border:1px solid var(--line);border-radius:11px;padding:9px 12px;background:rgba(255,255,255,.04);color:var(--text);cursor:pointer;font-weight:900}
+    .rank-refresh:hover{border-color:rgba(87,230,255,.35);color:var(--cyan)}
+    .rank-table{width:100%;border-collapse:collapse}
+    .rank-table th,.rank-table td{padding:14px 18px;text-align:left;border-bottom:1px solid var(--line)}
+    .rank-table th{color:var(--muted);font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.02)}
+    .rank-table tbody tr:last-child td{border-bottom:0}
+    .rank-table tbody tr:hover{background:rgba(87,230,255,.035)}
+    .rank-pos{width:88px;font-weight:1000;color:var(--gold)}
+    .rank-player{font-weight:900}
+    .rank-wins{width:130px;color:var(--cyan);font-weight:1000}
+    .rank-empty{padding:34px 20px;color:var(--muted);text-align:center;line-height:1.6}
+    .rank-meta{margin-top:12px;color:var(--muted);font-size:.86rem;line-height:1.55}
+    @media(max-width:620px){.live-rank-toolbar{align-items:flex-start;flex-direction:column}.rank-table th,.rank-table td{padding:12px 11px}.rank-pos{width:60px}.rank-wins{width:86px}}
+
+    footer{
+      margin-top:28px;
+      padding:34px 0 50px;
+      border-top:1px solid var(--line);
+      color:var(--muted);
+      font-size:.92rem;
+      text-align:center;
+    }
+
+    [data-lang-panel]{display:none}
+    [data-lang-panel].active{display:block}
+
+    @media(max-width:760px){
+      .topbar-inner{min-height:64px}
+      .brand span:last-child{display:none}
+      .hero{padding-top:62px}
+      .steps,.rules,.choice-grid,.stat-grid,.prize{grid-template-columns:1fr}
+      .season-row{grid-template-columns:1fr}
+      .season-row.header{display:none}
+      .season-row>div:before{
+        content:attr(data-label);
+        display:block;
+        margin-bottom:4px;
+        color:var(--muted);
+        font-size:.72rem;
+        font-weight:900;
+        letter-spacing:.07em;
+        text-transform:uppercase;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <div class="brand">
+        <div class="brand-mark">RD</div>
+        <span>RushBud Rank Duel</span>
+      </div>
+
+      <div class="language" aria-label="Language selector">
+        <button class="lang-btn active" data-lang="pt">🇧🇷 PT</button>
+        <button class="lang-btn" data-lang="en">🇺🇸 EN</button>
+        <button class="lang-btn" data-lang="es">🇪🇸 ES</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===================== PT ===================== -->
+    <div data-lang-panel="pt" class="active">
+      <section class="hero">
+        <div class="shell">
+          <div class="eyebrow">⚔️ RushBud Arena</div>
+          <h1>RANK <span class="gold">DUEL</span></h1>
+          <p class="lead">Desafie outro jogador no chat, use seus Buds, acumule Wins e aumente suas chances no sorteio final da temporada.</p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#video-pt">▶ Como funciona</a>
+            <a class="btn" href="#regras-pt">📜 Regras</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="video-pt">
+        <div class="shell">
+          <h2 class="section-title">Vídeo explicativo</h2>
+          <p class="section-copy">Coloque seu vídeo em <b>media/rank-duel-guide.mp4</b>. A página detecta o arquivo automaticamente.</p>
+          <div class="card video-card">
+            <div class="video-frame">
+              <video class="guide-video" controls preload="metadata" playsinline>
+                <source src="media/rank-duel-guide.mp4" type="video/mp4">
+              </video>
+              <div class="video-placeholder">
+                <div>
+                  <div class="play-icon">▶</div>
+                  <strong>Vídeo do Rank Duel</strong>
+                  <span>Adicione o arquivo <b>rank-duel-guide.mp4</b> dentro da pasta <b>media</b> antes de publicar.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="shell">
+          <h2 class="section-title">Como jogar</h2>
+          <p class="section-copy">A arena executa a batalha. Você só precisa criar o desafio, responder ao convite e escolher sua estratégia no round final.</p>
+
+          <div class="steps">
+            <article class="card step">
+              <div class="step-head"><div class="step-num">1</div><h3>Desafie um jogador</h3></div>
+              <p>Use um dos dois valores permitidos:</p>
+              <div class="command-row">
+                <code class="command">!duel @nome 50</code>
+                <code class="command">!duel @nome 100</code>
+              </div>
+            </article>
+
+            <article class="card step">
+              <div class="step-head"><div class="step-num">2</div><h3>Aceite ou recuse</h3></div>
+              <p>O convidado responde <b>Y</b> para aceitar ou <b>N</b> para recusar. Cada jogador só pode ter <b>1 convite pendente por vez</b>. Novos convites para essa pessoa ficam bloqueados até o convite atual ser aceito, recusado ou expirar. Se você quiser liberar o espaço para que outra pessoa te desafie, responda <b>N</b>.</p>
+            </article>
+
+            <article class="card step">
+              <div class="step-head"><div class="step-num">3</div><h3>Rounds 1 e 2</h3></div>
+              <p>Os dois primeiros rounds são totalmente automáticos. Não é necessário digitar nenhum comando durante essa parte da luta.</p>
+            </article>
+
+            <article class="card step">
+              <div class="step-head"><div class="step-num">4</div><h3>Round 3: escolha final</h3></div>
+              <p>No round final, os dois jogadores têm cerca de 20 segundos para escolher <b>!safe</b> ou <b>!overdrive</b>. Quem não responder a tempo recebe <b>Safe</b> automaticamente.</p>
+              <div class="command-row">
+                <code class="command">!safe</code>
+                <code class="command">!overdrive</code>
+              </div>
+            </article>
+          </div>
+
+          <div class="choice-grid">
+            <article class="card choice safe">
+              <div class="choice-label">🛡️ !safe</div>
+              <h3>Seguro e previsível</h3>
+              <p>O dano base do round final é aplicado normalmente.</p>
+              <ul class="choice-list">
+                <li>O roll base do round final vai de 1 a 100.</li>
+                <li>O valor do roll é aplicado sem multiplicador adicional.</li>
+                <li>Se você não escolher nada, o sistema usa Safe automaticamente.</li>
+                <li>Roll base de 85 a 100 pode mostrar CRIT visual; o CRIT sozinho não aumenta o dano.</li>
+              </ul>
+            </article>
+
+            <article class="card choice overdrive">
+              <div class="choice-label">⚡ !overdrive</div>
+              <h3>Alto risco, alto impacto</h3>
+              <p>Overdrive usa o mesmo roll base, mas adiciona uma chance de dobrar tudo — ou perder o ataque.</p>
+              <ul class="choice-list">
+                <li>50% de chance de causar <b>2× o dano base</b>.</li>
+                <li>50% de chance de causar <b>0 de dano</b> no round final.</li>
+                <li>O CRIT visual continua baseado no roll original de 85–100.</li>
+                <li>Se o Overdrive falhar e causar 0, o CRIT não aparece.</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="shell">
+          <h2 class="section-title">Buds e Wins</h2>
+          <p class="section-copy">Buds são pontos gratuitos usados dentro do sistema do canal. O vencedor recebe os Buds combinados dos dois jogadores e também soma Wins no Rank Duel.</p>
+
+          <div class="stat-grid">
+            <article class="card score-card">
+              <h3>Duelo de 50 Buds</h3>
+              <div class="score-big">+1 Win</div>
+              <p>Cada jogador usa 50 Buds. O vencedor recebe 100 Buds.</p>
+            </article>
+
+            <article class="card score-card">
+              <h3>Duelo de 100 Buds</h3>
+              <div class="score-big">+2 Wins</div>
+              <p>Cada jogador usa 100 Buds. O vencedor recebe 200 Buds.</p>
+            </article>
+
+            <article class="card score-card">
+              <h3>DataPad especial</h3>
+              <div class="score-big">+5 Wins</div>
+              <p>Um prêmio raro do DataPad adiciona +5 Wins diretamente ao seu Rank Duel.</p>
+            </article>
+          </div>
+
+          <div class="notice"><b>Como o sorteio funciona:</b> cada Win acumulada conta como uma entrada/chance no sorteio final. Quanto mais Wins, mais entradas você acumula.</div>
+        </div>
+      </section>
+
+      <section>
+        <div class="shell">
+          <h2 class="section-title">Temporada e bônus de colocação</h2>
+          <p class="section-copy">A duração inicial prevista da temporada é de aproximadamente <b>3 meses</b>. No encerramento, o ranking recebe bônus extras antes do sorteio final.</p>
+
+          <div class="card season-table">
+            <div class="season-row header">
+              <div>Colocação</div><div>Bônus</div><div>Como fica</div>
+            </div>
+            <div class="season-row">
+              <div data-label="Colocação">🥇 1º lugar</div>
+              <div class="bonus" data-label="Bônus">+20 Wins</div>
+              <div data-label="Como fica">Wins acumuladas + 20 entradas extras.</div>
+            </div>
+            <div class="season-row">
+              <div data-label="Colocação">🥈 2º lugar</div>
+              <div class="bonus" data-label="Bônus">+15 Wins</div>
+              <div data-label="Como fica">Wins acumuladas + 15 entradas extras.</div>
+            </div>
+            <div class="season-row">
+              <div data-label="Colocação">🥉 3º lugar</div>
+              <div class="bonus" data-label="Bônus">+10 Wins</div>
+              <div data-label="Como fica">Wins acumuladas + 10 entradas extras.</div>
+            </div>
+            <div class="season-row">
+              <div data-label="Colocação">4º ao 10º</div>
+              <div class="bonus" data-label="Bônus">+5 Wins</div>
+              <div data-label="Como fica">Cada jogador recebe +5 entradas extras.</div>
+            </div>
+            <div class="season-row">
+              <div data-label="Colocação">11º em diante</div>
+              <div data-label="Bônus">Sem bônus</div>
+              <div data-label="Como fica">Mantém todas as Wins conquistadas durante a temporada.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="shell">
+          <h2 class="section-title">Prêmio final</h2>
+          <p class="section-copy">Ao final da temporada, o vencedor do sorteio elegível receberá o Scorpion Plushie abaixo.</p>
+
+          <div class="prize">
+            <div class="card prize-visual">
+              <div>
+                <img class="prize-product-image" src="assets/scorpion-plushie.webp" alt="Scorpion Plushie" loading="lazy" />
+                <h3>Scorpion Plushie</h3>
+                <p style="color:var(--muted);margin:8px 0 0">Makeship</p>
+              </div>
+            </div>
+
+            <article class="card prize-copy">
+              <h3 style="margin-top:0;font-size:1.45rem">Scorpion Plushie</h3>
+              <p style="color:var(--muted);line-height:1.7">Prêmio oficial definido para o Rank Duel. Consulte a página do produto no Makeship pelo botão abaixo.</p>
+              <p><a class="btn primary" href="https://www.makeship.com/products/scorpion-plushie" target="_blank" rel="noopener noreferrer">🦂 Ver prêmio no Makeship</a></p>
+
+              <div class="tag-list">
+                <span class="tag">🌎 Américas</span>
+                <span class="tag">🇮🇳 Índia</span>
+                <span class="tag">🇵🇭 Filipinas</span>
+                <span class="tag">🇻🇳 Vietnã</span>
+              </div>
+
+              <div class="notice">O prêmio só poderá ser enviado para os destinos elegíveis acima. Se a pessoa sorteada estiver em outro país/região, ela não poderá receber este prêmio e será realizado um novo sorteio para selecionar outro participante elegível.</div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="regras-pt">
+        <div class="shell">
+          <h2 class="section-title">Regras do Rank Duel</h2>
+          <p class="section-copy">Participar é voluntário e gratuito. Estas regras existem para manter o sistema justo e claro para todos.</p>
+
+          <div class="rules">
+            <article class="card rule-card">
+              <div class="rule-icon">🆓</div>
+              <h3>Participação gratuita</h3>
+              <p>Nenhum pagamento ou cobrança em dinheiro é exigido em qualquer momento. Buds são obtidos e usados dentro do sistema do canal.</p>
+            </article>
+
+            <article class="card rule-card">
+              <div class="rule-icon">🎟️</div>
+              <h3>Wins e sorteio</h3>
+              <p>As Wins acumuladas durante a temporada, incluindo bônus de colocação e o prêmio especial de +5 Wins do DataPad, formam suas entradas para o sorteio final.</p>
+            </article>
+
+            <article class="card rule-card">
+              <div class="rule-icon">📦</div>
+              <h3>Elegibilidade de envio</h3>
+              <p>O prêmio físico só será enviado para destinos nas Américas, Índia, Filipinas e Vietnã. Um vencedor fora dessas áreas será substituído por um novo sorteio.</p>
+            </article>
+
+            <article class="card rule-card">
+              <div class="rule-icon">🛡️</div>
+              <h3>Integridade da competição</h3>
+              <p>RushBud se reserva o direito de desqualificar participantes que, a seu critério, violem as regras, abusem ou tentem manipular o sistema, atuem de má-fé ou não sejam elegíveis para participar.</p>
+            </article>
+          </div>
+
+          <div class="notice">As regras e a estrutura da temporada publicadas nesta página são a referência do Rank Duel durante a competição.</div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ===================== EN ===================== -->
+    <div data-lang-panel="en">
+      <section class="hero">
+        <div class="shell">
+          <div class="eyebrow">⚔️ RushBud Arena</div>
+          <h1>RANK <span class="gold">DUEL</span></h1>
+          <p class="lead">Challenge another player in chat, use your Buds, collect Wins and increase your chances in the season-ending prize draw.</p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#video-en">▶ How it works</a>
+            <a class="btn" href="#rules-en">📜 Rules</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="video-en">
+        <div class="shell">
+          <h2 class="section-title">Explainer video</h2>
+          <p class="section-copy">Place your video at <b>media/rank-duel-guide.mp4</b>. The page will detect it automatically.</p>
+          <div class="card video-card">
+            <div class="video-frame">
+              <video class="guide-video" controls preload="metadata" playsinline>
+                <source src="media/rank-duel-guide.mp4" type="video/mp4">
+              </video>
+              <div class="video-placeholder">
+                <div>
+                  <div class="play-icon">▶</div>
+                  <strong>Rank Duel video</strong>
+                  <span>Add <b>rank-duel-guide.mp4</b> inside the <b>media</b> folder before publishing.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="shell">
+          <h2 class="section-title">How to play</h2>
+          <p class="section-copy">The arena runs the battle. You only need to create the challenge, answer the invite, and choose your final-round strategy.</p>
+
+          <div class="steps">
+            <article class="card step">
+              <div class="step-head"><div class="step-num">1</div><h3>Challenge a player</h3></div>
+              <p>Use one of the two allowed amounts:</p>
+              <div class="command-row">
+                <code class="command">!duel @name 50</code>
+                <code class="command">!duel @name 100</code>
+              </div>
+            </article>
+
+            <article class="card step">
+              <div class="step-head"><div class="step-num">2</div><h3>Accept or decline</h3></div>
+              <p>The invited player replies <b>Y</b> to accept or <b>N</b> to decline. Each player can have only <b>1 pending invite at a time</b>. New invites to that player are blocked until the current invite is accepted, declined, or expires. If you want to free the slot so somebody else can challenge you, reply <b>N</b>.</p>
+            </article>
+
+            <article class="card step">
+              <div class="step-head"><div class="step-num">3</div><h3>Rounds 1 and 2</h3></div>
+              <p>The first two rounds are fully automatic. No command is required during this part of the battle.</p>
+            </article>
+
+            <article class="card step">
+              <div class="step-head"><div class="step-num">4</div><h3>Round 3: final choice</h3></div>
+              <p>In the final round, both players have about 20 seconds to choose <b>!safe</b> or <b>!overdrive</b>. If you do not answer in time, the system automatically uses <b>Safe</b>.</p>
+              <div class="command-row">
+                <code class="command">!safe</code>
+                <code class="command">!overdrive</code>
+              </div>
+            </article>
+          </div>
+
+          <div class="choice-grid">
+            <article class="card choice safe">
+              <div class="choice-label">🛡️ !safe</div>
+              <h3>Stable and predictable</h3>
+              <p>Your final-round base damage is applied normally.</p>
+              <ul class="choice-list">
+                <li>The final-round base roll is 1–100.</li>
+                <li>The roll is applied with no extra multiplier.</li>
+                <li>If you make no choice, Safe is selected automatically.</li>
+                <li>A base roll of 85–100 may display a visual CRIT; CRIT itself does not increase damage.</li>
+              </ul>
+            </article>
+
+            <article class="card choice overdrive">
+              <div class="choice-label">⚡ !overdrive</div>
+              <h3>High risk, high impact</h3>
+              <p>Overdrive uses the same base roll but adds a high-risk outcome.</p>
+              <ul class="choice-list">
+                <li>50% chance to deal <b>2× base damage</b>.</li>
+                <li>50% chance to deal <b>0 damage</b> in the final round.</li>
+                <li>The visual CRIT still depends on the original 85–100 base roll.</li>
+                <li>If Overdrive fails and deals 0, CRIT is not shown.</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="shell">
+          <h2 class="section-title">Buds and Wins</h2>
+          <p class="section-copy">Buds are free channel points used inside the stream system. The winner receives the combined Buds from both players and also earns Wins for Rank Duel.</p>
+
+          <div class="stat-grid">
+            <article class="card score-card">
+              <h3>50-Bud Duel</h3>
+              <div class="score-big">+1 Win</div>
+              <p>Each player uses 50 Buds. The winner receives 100 Buds.</p>
+            </article>
+
+            <article class="card score-card">
+              <h3>100-Bud Duel</h3>
+              <div class="score-big">+2 Wins</div>
+              <p>Each player uses 100 Buds. The winner receives 200 Buds.</p>
+            </article>
+
+            <article class="card score-card">
+              <h3>Special DataPad</h3>
+              <div class="score-big">+5 Wins</div>
+              <p>A rare DataPad reward adds +5 Wins directly to your Rank Duel total.</p>
+            </article>
+          </div>
+
+          <div class="notice"><b>Prize draw:</b> every accumulated Win counts as one entry/chance in the final draw. More Wins means more entries.</div>
+        </div>
+      </section>
+
+      <section>
+        <div class="shell">
+          <h2 class="section-title">Season and placement bonuses</h2>
+          <p class="section-copy">The season is initially planned to last approximately <b>3 months</b>. At the end, placement bonuses are added before the final draw.</p>
+
+          <div class="card season-table">
+            <div class="season-row header">
+              <div>Placement</div><div>Bonus</div><div>Final effect</div>
+            </div>
+            <div class="season-row">
+              <div data-label="Placement">🥇 1st place</div>
+              <div class="bonus" data-label="Bonus">+20 Wins</div>
+              <div data-label="Final effect">Accumulated Wins + 20 extra entries.</div>
+            </div>
+            <div class="season-row">
+              <div data-label="Placement">🥈 2nd place</div>
+              <div class="bonus" data-label="Bonus">+15 Wins</div>
+              <div data-label="Final effect">Accumulated Wins + 15 extra entries.</div>
+            </div>
+            <div class="season-row">
+              <div data-label="Placement">🥉 3rd place</div>
+              <div class="bonus" data-label="Bonus">+10 Wins</div>
+              <div data-label="Final effect">Accumulated Wins + 10 extra entries.</div>
+            </div>
+            <div class="season-row">
+              <div data-label="Placement">4th–10th</div>
+              <div class="bonus" data-label="Bonus">+5 Wins</div>
+              <div data-label="Final effect">Each player receives 5 extra entries.</div>
+            </div>
+            <div class="season-row">
+              <div data-label="Placement">11th and below</div>
+              <div data-label="Bonus">No bonus</div>
+              <div data-label="Final effect">Keeps all Wins earned during the season.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="shell">
+          <h2 class="section-title">Final prize</h2>
+          <p class="section-copy">At the end of the season, the eligible winner selected in the draw will receive the Scorpion Plushie below.</p>
+
+          <div class="prize">
+            <div class="card prize-visual">
+              <div>
+                <img class="prize-product-image" src="assets/scorpion-plushie.webp" alt="Scorpion Plushie" loading="lazy" />
+                <h3>Scorpion Plushie</h3>
+                <p style="color:var(--muted);margin:8px 0 0">Makeship</p>
+              </div>
+            </div>
+
+            <article class="card prize-copy">
+              <h3 style="margin-top:0;font-size:1.45rem">Scorpion Plushie</h3>
+              <p style="color:var(--muted);line-height:1.7">This is the final Rank Duel prize. Use the button below to view the product page on Makeship.</p>
+              <p><a class="btn primary" href="https://www.makeship.com/products/scorpion-plushie" target="_blank" rel="noopener noreferrer">🦂 View prize on Makeship</a></p>
+
+              <div class="tag-list">
+                <span class="tag">🌎 Americas</span>
+                <span class="tag">🇮🇳 India</span>
+                <span class="tag">🇵🇭 Philippines</span>
+                <span class="tag">🇻🇳 Vietnam</span>
+              </div>
+
+              <div class="notice">The physical prize can only be shipped to the eligible destinations above. If the selected winner is located elsewhere, they cannot receive this prize and a new draw will be held to select another eligible participant.</div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="rules-en">
+        <div class="shell">
+          <h2 class="section-title">Rank Duel rules</h2>
+          <p class="section-copy">Participation is voluntary and free. These rules are intended to keep the system fair and clear for everyone.</p>
+
+          <div class="rules">
+            <article class="card rule-card">
+              <div class="rule-icon">🆓</div>
+              <h3>Free participation</h3>
+              <p>No payment or monetary charge is required at any stage. Buds are earned and used inside the channel system.</p>
+            </article>
+
+            <article class="card rule-card">
+              <div class="rule-icon">🎟️</div>
+              <h3>Wins and prize draw</h3>
+              <p>Wins earned during the season, including placement bonuses and the special +5-Win DataPad reward, become your entries for the final draw.</p>
+            </article>
+
+            <article class="card rule-card">
+              <div class="rule-icon">📦</div>
+              <h3>Shipping eligibility</h3>
+              <p>The physical prize can only be shipped to the Americas, India, the Philippines, and Vietnam. A winner outside these areas will be replaced through a new draw.</p>
+            </article>
+
+            <article class="card rule-card">
+              <div class="rule-icon">🛡️</div>
+              <h3>Competition integrity</h3>
+              <p>RushBud reserves the right to disqualify participants who, in the channel owner's judgment, violate these rules, abuse or attempt to manipulate the system, act in bad faith, or are otherwise ineligible.</p>
+            </article>
+          </div>
+
+          <div class="notice">The rules and season structure published on this page are the Rank Duel reference during the competition.</div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ===================== ES ===================== -->
+    <div data-lang-panel="es">
+      <section class="hero">
+        <div class="shell">
+          <div class="eyebrow">⚔️ RushBud Arena</div>
+          <h1>RANK <span class="gold">DUEL</span></h1>
+          <p class="lead">Desafía a otro jugador en el chat, usa tus Buds, acumula Wins y aumenta tus oportunidades en el sorteo final de la temporada.</p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#video-es">▶ Cómo funciona</a>
+            <a class="btn" href="#reglas-es">📜 Reglas</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="video-es">
+        <div class="shell">
+          <h2 class="section-title">Video explicativo</h2>
+          <p class="section-copy">Coloca tu video en <b>media/rank-duel-guide.mp4</b>. La página detectará el archivo automáticamente.</p>
+          <div class="card video-card">
+            <div class="video-frame">
+              <video class="guide-video" controls preload="metadata" playsinline>
+                <source src="media/rank-duel-guide.mp4" type="video/mp4">
+              </video>
+              <div class="video-placeholder">
+                <div>
+                  <div class="play-icon">▶</div>
+                  <strong>Video de Rank Duel</strong>
+                  <span>Agrega <b>rank-duel-guide.mp4</b> dentro de la carpeta <b>media</b> antes de publicar.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="shell">
+          <h2 class="section-title">Cómo jugar</h2>
+          <p class="section-copy">La arena ejecuta la batalla. Solo necesitas crear el desafío, responder la invitación y elegir tu estrategia en la ronda final.</p>
+
+          <div class="steps">
+            <article class="card step">
+              <div class="step-head"><div class="step-num">1</div><h3>Desafía a un jugador</h3></div>
+              <p>Usa uno de los dos valores permitidos:</p>
+              <div class="command-row">
+                <code class="command">!duel @nombre 50</code>
+                <code class="command">!duel @nombre 100</code>
+              </div>
+            </article>
+
+            <article class="card step">
+              <div class="step-head"><div class="step-num">2</div><h3>Acepta o rechaza</h3></div>
+              <p>El jugador invitado responde <b>Y</b> para aceptar o <b>N</b> para rechazar. Cada jugador solo puede tener <b>1 invitación pendiente a la vez</b>. Las nuevas invitaciones quedan bloqueadas hasta que la actual sea aceptada, rechazada o expire. Si quieres liberar el espacio para que otra persona te desafíe, responde <b>N</b>.</p>
+            </article>
+
+            <article class="card step">
+              <div class="step-head"><div class="step-num">3</div><h3>Rondas 1 y 2</h3></div>
+              <p>Las dos primeras rondas son totalmente automáticas. No necesitas escribir ningún comando durante esta parte de la batalla.</p>
+            </article>
+
+            <article class="card step">
+              <div class="step-head"><div class="step-num">4</div><h3>Ronda 3: elección final</h3></div>
+              <p>En la ronda final, ambos jugadores tienen aproximadamente 20 segundos para elegir <b>!safe</b> o <b>!overdrive</b>. Si no respondes a tiempo, el sistema usa <b>Safe</b> automáticamente.</p>
+              <div class="command-row">
+                <code class="command">!safe</code>
+                <code class="command">!overdrive</code>
+              </div>
+            </article>
+          </div>
+
+          <div class="choice-grid">
+            <article class="card choice safe">
+              <div class="choice-label">🛡️ !safe</div>
+              <h3>Seguro y predecible</h3>
+              <p>El daño base de la ronda final se aplica normalmente.</p>
+              <ul class="choice-list">
+                <li>El roll base de la ronda final va de 1 a 100.</li>
+                <li>El valor del roll se aplica sin multiplicador adicional.</li>
+                <li>Si no eliges nada, Safe se selecciona automáticamente.</li>
+                <li>Un roll base de 85 a 100 puede mostrar un CRIT visual; el CRIT por sí solo no aumenta el daño.</li>
+              </ul>
+            </article>
+
+            <article class="card choice overdrive">
+              <div class="choice-label">⚡ !overdrive</div>
+              <h3>Alto riesgo, alto impacto</h3>
+              <p>Overdrive usa el mismo roll base, pero agrega un resultado de alto riesgo.</p>
+              <ul class="choice-list">
+                <li>50% de probabilidad de causar <b>2× el daño base</b>.</li>
+                <li>50% de probabilidad de causar <b>0 de daño</b> en la ronda final.</li>
+                <li>El CRIT visual sigue dependiendo del roll base original de 85–100.</li>
+                <li>Si Overdrive falla y causa 0, el CRIT no aparece.</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="shell">
+          <h2 class="section-title">Buds y Wins</h2>
+          <p class="section-copy">Los Buds son puntos gratuitos del canal utilizados dentro del sistema del stream. El ganador recibe los Buds combinados de ambos jugadores y también suma Wins en Rank Duel.</p>
+
+          <div class="stat-grid">
+            <article class="card score-card">
+              <h3>Duelo de 50 Buds</h3>
+              <div class="score-big">+1 Win</div>
+              <p>Cada jugador usa 50 Buds. El ganador recibe 100 Buds.</p>
+            </article>
+
+            <article class="card score-card">
+              <h3>Duelo de 100 Buds</h3>
+              <div class="score-big">+2 Wins</div>
+              <p>Cada jugador usa 100 Buds. El ganador recibe 200 Buds.</p>
+            </article>
+
+            <article class="card score-card">
+              <h3>DataPad especial</h3>
+              <div class="score-big">+5 Wins</div>
+              <p>Una recompensa rara del DataPad agrega +5 Wins directamente a tu Rank Duel.</p>
+            </article>
+          </div>
+
+          <div class="notice"><b>Sorteo final:</b> cada Win acumulada cuenta como una entrada/oportunidad en el sorteo. Más Wins significan más entradas.</div>
+        </div>
+      </section>
+
+      <section>
+        <div class="shell">
+          <h2 class="section-title">Temporada y bonos de posición</h2>
+          <p class="section-copy">La duración inicial prevista de la temporada es de aproximadamente <b>3 meses</b>. Al final, se agregan bonos de posición antes del sorteo.</p>
+
+          <div class="card season-table">
+            <div class="season-row header">
+              <div>Posición</div><div>Bono</div><div>Efecto final</div>
+            </div>
+            <div class="season-row">
+              <div data-label="Posición">🥇 1er lugar</div>
+              <div class="bonus" data-label="Bono">+20 Wins</div>
+              <div data-label="Efecto final">Wins acumuladas + 20 entradas extra.</div>
+            </div>
+            <div class="season-row">
+              <div data-label="Posición">🥈 2º lugar</div>
+              <div class="bonus" data-label="Bono">+15 Wins</div>
+              <div data-label="Efecto final">Wins acumuladas + 15 entradas extra.</div>
+            </div>
+            <div class="season-row">
+              <div data-label="Posición">🥉 3er lugar</div>
+              <div class="bonus" data-label="Bono">+10 Wins</div>
+              <div data-label="Efecto final">Wins acumuladas + 10 entradas extra.</div>
+            </div>
+            <div class="season-row">
+              <div data-label="Posición">4º–10º</div>
+              <div class="bonus" data-label="Bono">+5 Wins</div>
+              <div data-label="Efecto final">Cada jugador recibe 5 entradas extra.</div>
+            </div>
+            <div class="season-row">
+              <div data-label="Posición">11º en adelante</div>
+              <div data-label="Bono">Sin bono</div>
+              <div data-label="Efecto final">Mantiene todas las Wins obtenidas durante la temporada.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="shell">
+          <h2 class="section-title">Premio final</h2>
+          <p class="section-copy">Al final de la temporada, el ganador elegible seleccionado en el sorteo recibirá el Scorpion Plushie.</p>
+
+          <div class="prize">
+            <div class="card prize-visual">
+              <div>
+                <img class="prize-product-image" src="assets/scorpion-plushie.webp" alt="Scorpion Plushie" loading="lazy" />
+                <h3>Scorpion Plushie</h3>
+                <p style="color:var(--muted);margin:8px 0 0">Makeship</p>
+              </div>
+            </div>
+
+            <article class="card prize-copy">
+              <h3 style="margin-top:0;font-size:1.45rem">Scorpion Plushie</h3>
+              <p style="color:var(--muted);line-height:1.7">Este es el premio final de Rank Duel. Usa el botón para ver la página del producto en Makeship.</p>
+              <p><a class="btn primary" href="https://www.makeship.com/products/scorpion-plushie" target="_blank" rel="noopener noreferrer">🦂 Ver premio en Makeship</a></p>
+
+              <div class="tag-list">
+                <span class="tag">🌎 Américas</span>
+                <span class="tag">🇮🇳 India</span>
+                <span class="tag">🇵🇭 Filipinas</span>
+                <span class="tag">🇻🇳 Vietnam</span>
+              </div>
+
+              <div class="notice">El premio físico solo podrá enviarse a los destinos elegibles indicados arriba. Si la persona seleccionada vive fuera de esas áreas, no podrá recibir este premio y se realizará un nuevo sorteo para seleccionar a otro participante elegible.</div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="reglas-es">
+        <div class="shell">
+          <h2 class="section-title">Reglas de Rank Duel</h2>
+          <p class="section-copy">La participación es voluntaria y gratuita. Estas reglas existen para mantener el sistema justo y claro para todos.</p>
+
+          <div class="rules">
+            <article class="card rule-card">
+              <div class="rule-icon">🆓</div>
+              <h3>Participación gratuita</h3>
+              <p>No se exige ningún pago ni cobro de dinero en ningún momento. Los Buds se obtienen y se usan dentro del sistema del canal.</p>
+            </article>
+
+            <article class="card rule-card">
+              <div class="rule-icon">🎟️</div>
+              <h3>Wins y sorteo</h3>
+              <p>Las Wins obtenidas durante la temporada, incluidos los bonos de posición y la recompensa especial de +5 Wins del DataPad, se convierten en tus entradas para el sorteo final.</p>
+            </article>
+
+            <article class="card rule-card">
+              <div class="rule-icon">📦</div>
+              <h3>Elegibilidad de envío</h3>
+              <p>El premio físico solo se enviará a las Américas, India, Filipinas y Vietnam. Un ganador fuera de estas áreas será reemplazado mediante un nuevo sorteo.</p>
+            </article>
+
+            <article class="card rule-card">
+              <div class="rule-icon">🛡️</div>
+              <h3>Integridad de la competencia</h3>
+              <p>RushBud se reserva el derecho de descalificar a participantes que, a criterio del propietario del canal, violen estas reglas, abusen o intenten manipular el sistema, actúen de mala fe o no sean elegibles.</p>
+            </article>
+          </div>
+
+          <div class="notice">Las reglas y la estructura de temporada publicadas en esta página son la referencia de Rank Duel durante la competencia.</div>
+        </div>
+      </section>
+    </div>
+
+    <section id="live-rank" class="live-rank-wrap">
+      <div class="shell">
+        <div class="eyebrow" id="rank-eyebrow">🏆 RANKING AO VIVO</div>
+        <h2 class="section-title" id="rank-title">Rank Duel — ranking atual</h2>
+        <p class="section-copy" id="rank-copy">Todos os jogadores com Wins na temporada atual. A página consulta o ranking automaticamente.</p>
+        <div class="card live-rank-card">
+          <div class="live-rank-toolbar">
+            <div class="live-rank-status"><span class="live-dot"></span><span id="rank-status">Consultando ranking...</span></div>
+            <button class="rank-refresh" id="rank-refresh" type="button">↻ Atualizar agora</button>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="rank-table">
+              <thead><tr><th id="rank-col-position">Posição</th><th id="rank-col-player">Jogador</th><th id="rank-col-wins">Wins</th></tr></thead>
+              <tbody id="rank-body"></tbody>
+            </table>
+          </div>
+          <div class="rank-empty" id="rank-empty" hidden>Nenhum jogador com Wins ainda.</div>
+        </div>
+        <div class="rank-meta" id="rank-meta"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="shell">RushBud • Rank Duel</div>
+  </footer>
+
+  <script>
+    let currentLang = localStorage.getItem('rankDuelLang') || 'pt';
+
+    const buttons = [...document.querySelectorAll('.lang-btn')];
+    const panels = [...document.querySelectorAll('[data-lang-panel]')];
+
+    function setLanguage(lang){
+      currentLang = lang;
+      buttons.forEach(btn => btn.classList.toggle('active', btn.dataset.lang === lang));
+      panels.forEach(panel => panel.classList.toggle('active', panel.dataset.langPanel === lang));
+      document.documentElement.lang = lang === 'pt' ? 'pt-BR' : lang;
+      localStorage.setItem('rankDuelLang', lang);
+      if(typeof applyRankLanguage === 'function') applyRankLanguage();
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    buttons.forEach(btn => btn.addEventListener('click', () => setLanguage(btn.dataset.lang)));
+
+    const saved = localStorage.getItem('rankDuelLang');
+    if(saved && ['pt','en','es'].includes(saved)) setLanguage(saved);
+
+    document.querySelectorAll('.guide-video').forEach(video => {
+      const placeholder = video.parentElement.querySelector('.video-placeholder');
+
+      const showPlaceholder = () => {
+        video.style.visibility = 'hidden';
+        placeholder.classList.remove('hidden');
+      };
+
+      const showVideo = () => {
+        video.style.visibility = 'visible';
+        placeholder.classList.add('hidden');
+      };
+
+      video.addEventListener('loadedmetadata', showVideo);
+      video.addEventListener('canplay', showVideo);
+      video.addEventListener('error', showPlaceholder);
+
+      setTimeout(() => {
+        if(video.readyState === 0) showPlaceholder();
+      }, 900);
+    });
+
+    const rankText = {
+      pt:{eyebrow:'🏆 RANKING AO VIVO',title:'Rank Duel — ranking atual',copy:'Todos os jogadores com Wins na temporada atual. A página consulta o ranking automaticamente.',loading:'Consultando ranking...',live:'Ranking sincronizado',error:'Não foi possível carregar o ranking',refresh:'↻ Atualizar agora',position:'Posição',player:'Jogador',wins:'Wins',empty:'Nenhum jogador com Wins ainda.',season:'Temporada',updated:'Última atualização'},
+      en:{eyebrow:'🏆 LIVE LEADERBOARD',title:'Rank Duel — current leaderboard',copy:'Every player with Wins in the current season. The page checks the leaderboard automatically.',loading:'Loading leaderboard...',live:'Leaderboard synced',error:'Could not load leaderboard',refresh:'↻ Refresh now',position:'Rank',player:'Player',wins:'Wins',empty:'No players with Wins yet.',season:'Season',updated:'Last updated'},
+      es:{eyebrow:'🏆 RANKING EN VIVO',title:'Rank Duel — ranking actual',copy:'Todos los jugadores con Wins en la temporada actual. La página consulta el ranking automáticamente.',loading:'Consultando ranking...',live:'Ranking sincronizado',error:'No se pudo cargar el ranking',refresh:'↻ Actualizar ahora',position:'Posición',player:'Jugador',wins:'Wins',empty:'Todavía no hay jugadores con Wins.',season:'Temporada',updated:'Última actualización'}
+    };
+    let latestRankPayload=null, rankRequestRunning=false;
+
+    function rankMedal(p){if(p===1)return'🥇 1';if(p===2)return'🥈 2';if(p===3)return'🥉 3';return String(p)}
+    function safeDate(v){if(!v)return'—';const d=new Date(v);if(Number.isNaN(d.getTime()))return v;return new Intl.DateTimeFormat(currentLang==='pt'?'pt-BR':currentLang==='es'?'es':'en-US',{dateStyle:'medium',timeStyle:'short'}).format(d)}
+
+    function applyRankLanguage(){
+      const t=rankText[currentLang]||rankText.pt;
+      document.getElementById('rank-eyebrow').textContent=t.eyebrow;
+      document.getElementById('rank-title').textContent=t.title;
+      document.getElementById('rank-copy').textContent=t.copy;
+      document.getElementById('rank-refresh').textContent=t.refresh;
+      document.getElementById('rank-col-position').textContent=t.position;
+      document.getElementById('rank-col-player').textContent=t.player;
+      document.getElementById('rank-col-wins').textContent=t.wins;
+      document.getElementById('rank-empty').textContent=t.empty;
+      if(latestRankPayload) renderRank(latestRankPayload);
+    }
+
+    function renderRank(payload){
+      latestRankPayload=payload;
+      const t=rankText[currentLang]||rankText.pt, body=document.getElementById('rank-body'), empty=document.getElementById('rank-empty'), status=document.getElementById('rank-status'), meta=document.getElementById('rank-meta');
+      const players=(Array.isArray(payload?.players)?payload.players:[]).filter(p=>Number(p.wins)>0).sort((a,b)=>{
+        const wd=Number(b.wins)-Number(a.wins); if(wd!==0)return wd;
+        const at=a.lastWinUtc?new Date(a.lastWinUtc).getTime():Number.MAX_SAFE_INTEGER;
+        const bt=b.lastWinUtc?new Date(b.lastWinUtc).getTime():Number.MAX_SAFE_INTEGER;
+        if(at!==bt)return at-bt;
+        return String(a.userName||'').localeCompare(String(b.userName||''),undefined,{sensitivity:'base'});
+      });
+      body.innerHTML='';
+      if(!players.length){empty.hidden=false}else{
+        empty.hidden=true;
+        players.forEach((p,i)=>{
+          const tr=document.createElement('tr');
+          const pos=document.createElement('td');pos.className='rank-pos';pos.textContent=rankMedal(i+1);
+          const name=document.createElement('td');name.className='rank-player';name.textContent=p.userName||'viewer';
+          const wins=document.createElement('td');wins.className='rank-wins';wins.textContent=Number(p.wins||0).toLocaleString();
+          tr.append(pos,name,wins);body.appendChild(tr);
+        });
+      }
+      status.textContent=t.live;
+      const season=payload?.seasonName||(payload?.seasonNumber?`${t.season} ${payload.seasonNumber}`:t.season);
+      meta.textContent=`${season} • ${t.updated}: ${safeDate(payload?.updatedUtc||payload?.generatedUtc)}`;
+    }
+
+    async function loadRank(){
+      if(rankRequestRunning)return;
+      rankRequestRunning=true;
+      const t=rankText[currentLang]||rankText.pt;
+      document.getElementById('rank-status').textContent=t.loading;
+      try{
+        const response=await fetch(`/api/rank?t=${Date.now()}`,{cache:'no-store'});
+        if(!response.ok)throw new Error(`HTTP ${response.status}`);
+        renderRank(await response.json());
+      }catch(e){document.getElementById('rank-status').textContent=t.error;console.error('[RANK DUEL]',e)}
+      finally{rankRequestRunning=false}
+    }
+
+    document.getElementById('rank-refresh').addEventListener('click',loadRank);
+    setInterval(loadRank,10000);
+    applyRankLanguage();
+    loadRank();
+
+  </script>
+</body>
+</html>

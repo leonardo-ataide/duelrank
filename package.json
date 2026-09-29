@@ -1,0 +1,9 @@
+{
+  "name": "rushbud-rank-duel",
+  "version": "1.1.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@vercel/blob": "^2.6.1"
+  }
+}
