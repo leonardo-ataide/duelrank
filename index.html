@@ -217,13 +217,17 @@
       box-shadow:var(--shadow);
     }
 
-    .video-card{padding:14px}
+    .video-card{
+      padding:14px;
+      width:min(900px,100%);
+      margin:0 auto;
+    }
+
     .video-frame{
       position:relative;
-      aspect-ratio:16/9;
+      width:100%;
+      aspect-ratio:16 / 9;
       overflow:hidden;
-      display:grid;
-      place-items:center;
       border-radius:16px;
       border:1px solid rgba(255,255,255,.08);
       background:#05070a;
@@ -235,42 +239,6 @@
       display:block;
       object-fit:contain;
       background:#000;
-    }
-
-    .video-placeholder{
-      position:absolute;
-      inset:0;
-      display:grid;
-      place-items:center;
-      padding:28px;
-      text-align:center;
-      background:
-        radial-gradient(circle at 50% 36%,rgba(87,230,255,.13),transparent 30%),
-        linear-gradient(135deg,rgba(255,216,74,.05),rgba(87,230,255,.05)),
-        #080b10;
-    }
-
-    .video-placeholder.hidden{display:none}
-
-    .play-icon{
-      width:78px;
-      height:78px;
-      margin:0 auto 18px;
-      border-radius:50%;
-      display:grid;
-      place-items:center;
-      background:linear-gradient(135deg,var(--gold),var(--orange));
-      color:#101216;
-      font-size:2rem;
-      box-shadow:0 0 44px rgba(255,216,74,.22);
-    }
-
-    .video-placeholder strong{font-size:1.2rem}
-    .video-placeholder span{
-      display:block;
-      margin-top:8px;
-      color:var(--muted);
-      line-height:1.6;
     }
 
     .steps,.rules{
@@ -544,19 +512,11 @@
       <section id="video-pt">
         <div class="shell">
           <h2 class="section-title">Vídeo explicativo</h2>
-          <p class="section-copy">Coloque seu vídeo em <b>media/rank-duel-guide.mp4</b>. A página detecta o arquivo automaticamente.</p>
           <div class="card video-card">
             <div class="video-frame">
-              <video class="guide-video" controls preload="metadata" playsinline>
+              <video class="guide-video" autoplay muted loop playsinline preload="auto">
                 <source src="media/rank-duel-guide.mp4" type="video/mp4">
               </video>
-              <div class="video-placeholder">
-                <div>
-                  <div class="play-icon">▶</div>
-                  <strong>Vídeo do Rank Duel</strong>
-                  <span>Adicione o arquivo <b>rank-duel-guide.mp4</b> dentro da pasta <b>media</b> antes de publicar.</span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -777,19 +737,11 @@
       <section id="video-en">
         <div class="shell">
           <h2 class="section-title">Explainer video</h2>
-          <p class="section-copy">Place your video at <b>media/rank-duel-guide.mp4</b>. The page will detect it automatically.</p>
           <div class="card video-card">
             <div class="video-frame">
-              <video class="guide-video" controls preload="metadata" playsinline>
+              <video class="guide-video" autoplay muted loop playsinline preload="auto">
                 <source src="media/rank-duel-guide.mp4" type="video/mp4">
               </video>
-              <div class="video-placeholder">
-                <div>
-                  <div class="play-icon">▶</div>
-                  <strong>Rank Duel video</strong>
-                  <span>Add <b>rank-duel-guide.mp4</b> inside the <b>media</b> folder before publishing.</span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -1010,19 +962,11 @@
       <section id="video-es">
         <div class="shell">
           <h2 class="section-title">Video explicativo</h2>
-          <p class="section-copy">Coloca tu video en <b>media/rank-duel-guide.mp4</b>. La página detectará el archivo automáticamente.</p>
           <div class="card video-card">
             <div class="video-frame">
-              <video class="guide-video" controls preload="metadata" playsinline>
+              <video class="guide-video" autoplay muted loop playsinline preload="auto">
                 <source src="media/rank-duel-guide.mp4" type="video/mp4">
               </video>
-              <div class="video-placeholder">
-                <div>
-                  <div class="play-icon">▶</div>
-                  <strong>Video de Rank Duel</strong>
-                  <span>Agrega <b>rank-duel-guide.mp4</b> dentro de la carpeta <b>media</b> antes de publicar.</span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -1274,28 +1218,6 @@
 
     const saved = localStorage.getItem('rankDuelLang');
     if(saved && ['pt','en','es'].includes(saved)) setLanguage(saved);
-
-    document.querySelectorAll('.guide-video').forEach(video => {
-      const placeholder = video.parentElement.querySelector('.video-placeholder');
-
-      const showPlaceholder = () => {
-        video.style.visibility = 'hidden';
-        placeholder.classList.remove('hidden');
-      };
-
-      const showVideo = () => {
-        video.style.visibility = 'visible';
-        placeholder.classList.add('hidden');
-      };
-
-      video.addEventListener('loadedmetadata', showVideo);
-      video.addEventListener('canplay', showVideo);
-      video.addEventListener('error', showPlaceholder);
-
-      setTimeout(() => {
-        if(video.readyState === 0) showPlaceholder();
-      }, 900);
-    });
 
     const rankText = {
       pt:{eyebrow:'🏆 RANKING AO VIVO',title:'Rank Duel — ranking atual',copy:'Todos os jogadores com Wins na temporada atual. A página consulta o ranking automaticamente.',loading:'Consultando ranking...',live:'Ranking sincronizado',error:'Não foi possível carregar o ranking',refresh:'↻ Atualizar agora',position:'Posição',player:'Jogador',wins:'Wins',empty:'Nenhum jogador com Wins ainda.',season:'Temporada',updated:'Última atualização'},
