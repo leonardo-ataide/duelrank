@@ -1261,7 +1261,7 @@
         });
       }
       status.textContent=t.live;
-      const season=payload?.seasonName||(payload?.seasonNumber?`${t.season} ${payload.seasonNumber}`:t.season);
+      const season='Buddy Arena Season 01';
       meta.textContent=`${season} • ${t.updated}: ${safeDate(payload?.updatedUtc||payload?.generatedUtc)}`;
     }
 
