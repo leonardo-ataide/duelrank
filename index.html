@@ -1216,9 +1216,6 @@
 
     buttons.forEach(btn => btn.addEventListener('click', () => setLanguage(btn.dataset.lang)));
 
-    const saved = localStorage.getItem('rankDuelLang');
-    if(saved && ['pt','en','es'].includes(saved)) setLanguage(saved);
-
     const rankText = {
       pt:{eyebrow:'🏆 RANKING AO VIVO',title:'Rank Duel — ranking atual',copy:'Todos os jogadores com Wins na temporada atual. A página consulta o ranking automaticamente.',loading:'Consultando ranking...',live:'Ranking sincronizado',error:'Não foi possível carregar o ranking',refresh:'↻ Atualizar agora',position:'Posição',player:'Jogador',wins:'Wins',empty:'Nenhum jogador com Wins ainda.',season:'Temporada',updated:'Última atualização'},
       en:{eyebrow:'🏆 LIVE LEADERBOARD',title:'Rank Duel — current leaderboard',copy:'Every player with Wins in the current season. The page checks the leaderboard automatically.',loading:'Loading leaderboard...',live:'Leaderboard synced',error:'Could not load leaderboard',refresh:'↻ Refresh now',position:'Rank',player:'Player',wins:'Wins',empty:'No players with Wins yet.',season:'Season',updated:'Last updated'},
@@ -1283,7 +1280,14 @@
 
     document.getElementById('rank-refresh').addEventListener('click',loadRank);
     setInterval(loadRank,10000);
-    applyRankLanguage();
+
+    // Apply the saved language only after rankText and ranking functions exist.
+    // Calling setLanguage() earlier caused a ReferenceError and stopped the
+    // leaderboard JavaScript before loadRank() could run.
+    const saved = localStorage.getItem('rankDuelLang');
+    if(saved && ['pt','en','es'].includes(saved)) setLanguage(saved);
+    else applyRankLanguage();
+
     loadRank();
 
   </script>
